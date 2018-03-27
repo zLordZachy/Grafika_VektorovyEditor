@@ -11,14 +11,33 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="7*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Canvas Grid.Column="0"  Grid.Row="0" Background="Azure"></Canvas>
-        <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="2">
+        <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0"> 
+                   Primka
+                </RadioButton>
+            <RadioButton Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0">
+                
+            </RadioButton>
+            <RadioButton Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0">
+                cara
+            </RadioButton>
+            <RadioButton Style="{StaticResource {x:Type ToggleButton}}">cara</RadioButton>
+
+                <ToggleButton  Margin="5">cara</ToggleButton>
+                <ToggleButton Margin="5">obdelnik</ToggleButton>
+                <ToggleButton Margin="5">elipsa</ToggleButton>
+               <ToggleButton Margin="5">uprav</ToggleButton>
+                <ToggleButton Margin="5">smaz</ToggleButton>
+            </StackPanel>
+        <Canvas Grid.Column="0"  Grid.Row="1" Background="Azure"></Canvas>
+        <Border Grid.Column="0" Grid.Row="2" BorderBrush="Black" BorderThickness="2">
             <Grid Background="Silver" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
@@ -35,7 +54,7 @@
                         </StackPanel>
                         <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" Margin="5">
                             <Label Margin="0,0,5,0">Barva</Label>
-                            <Rectangle Width="20" Height="20" Fill="Blue" Margin="0,0,5,0"></Rectangle>
+                            <xctk:ColorPicker SelectedColor="{Binding BorderColor}" Width="60" Margin="0,0,5,0"></xctk:ColorPicker>
                             <ComboBox Margin="0,0,5,0" MinWidth="100"></ComboBox>
                           <xctk:IntegerUpDown MinWidth="80" Name="myUpDownControl" />
                         </StackPanel>
@@ -50,7 +69,7 @@
                         </StackPanel>
                         <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" Margin="5">
                             <Label Margin="0,0,5,0">Barva</Label>
-                            <Rectangle Width="20" Height="20" Fill="GreenYellow" Margin="0,0,5,0"></Rectangle>
+                            <xctk:ColorPicker SelectedColor="{Binding FillColor}" Width="60"></xctk:ColorPicker>
                             <Label Margin="0,0,5,0">Barva pozadí</Label>
                             <ComboBox Margin="0,0,5,0" MinWidth="100"></ComboBox>
                         </StackPanel>
