@@ -4,11 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      xmlns:local="clr-namespace:VektorovyEditor.View"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="MainPage">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"></RowDefinition>
@@ -19,24 +17,25 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Background="AliceBlue">
-                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0"> 
+            <RadioButton GroupName="Panel" IsChecked="{Binding Line}" Style="{StaticResource {x:Type ToggleButton}}" Margin="5,0,5,0" Width="70"> 
                    Primka
                 </RadioButton>
-            <RadioButton Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0">
-                
+            <RadioButton GroupName="Panel" IsChecked="{Binding Rectangle}" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0" Width="70">
+                Obdelnik
             </RadioButton>
-            <RadioButton Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0">
-                cara
+            <RadioButton GroupName="Panel" IsChecked="{Binding Ellipse}" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0" Width="70">
+                Elipsa
             </RadioButton>
-            <RadioButton Style="{StaticResource {x:Type ToggleButton}}">cara</RadioButton>
-
-                <ToggleButton  Margin="5">cara</ToggleButton>
-                <ToggleButton Margin="5">obdelnik</ToggleButton>
-                <ToggleButton Margin="5">elipsa</ToggleButton>
-               <ToggleButton Margin="5">uprav</ToggleButton>
-                <ToggleButton Margin="5">smaz</ToggleButton>
-            </StackPanel>
-        <Canvas Grid.Column="0"  Grid.Row="1" Background="Azure"></Canvas>
+            <RadioButton GroupName="Panel" IsChecked="{Binding Change}" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0" Width="70">
+                Uprav
+            </RadioButton>
+            <RadioButton GroupName="Panel" IsChecked="{Binding Delet}" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0" Width="70">
+                Smaž
+            </RadioButton>
+        </StackPanel>
+        <Canvas Name="BaseCanvas"  Grid.Column="0"  Grid.Row="1" Background="Azure">
+          
+        </Canvas>
         <Border Grid.Column="0" Grid.Row="2" BorderBrush="Black" BorderThickness="2">
             <Grid Background="Silver" >
                 <Grid.RowDefinitions>
