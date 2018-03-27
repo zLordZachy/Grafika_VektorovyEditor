@@ -12,12 +12,13 @@ namespace VektorovyEditor.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        #region Elements property
         public Color BorderColor
         {
             get => _borderColor;
             set
             {
-                _borderColor = value; 
+                _borderColor = value;
                 OnPropertyChanged(nameof(BorderColor));
             }
         }
@@ -32,6 +33,18 @@ namespace VektorovyEditor.ViewModel
             }
         }
 
+        public double StrokeThickness
+        {
+            get => _strokeThickness;
+            set
+            {
+                _strokeThickness = value;
+                OnPropertyChanged(nameof(StrokeThickness));
+            }
+        }
+
+        #endregion
+
         public bool Line { get; set; }
         public bool Rectangle { get; set; }
         public bool Ellipse { get; set; }
@@ -42,6 +55,9 @@ namespace VektorovyEditor.ViewModel
         #region SelectedElements
 
         public RectangleElement SelectedRectangle { get; set; }
+        public EllipseElement SelectedEllipse { get; set; }
+        public LineElement SelectedLine { get; set; }
+
 
         #endregion
 
@@ -52,11 +68,11 @@ namespace VektorovyEditor.ViewModel
         {
             BorderColor = Colors.BlueViolet;
             FillColor = Colors.GreenYellow;
+            StrokeThickness = 2;
             Canvas = baseCanvas;
             Canvas.MouseLeftButtonDown += CanvasMouseLeftButtonDown;
             Canvas.MouseLeftButtonUp += CanvasMouseLeftButtonUp;
             Canvas.MouseMove += CanvasMouseMove;
-
         }
 
         private void SetBorderColor(object obj)
@@ -80,14 +96,18 @@ namespace VektorovyEditor.ViewModel
         {
             if (Line)
             {
-
+                SelectedLine = new LineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
+                SelectedLine.Line.MouseLeftButtonDown += LineMouseButtonDown;
             }
             else if(Rectangle)
             {
-                SelectedRectangle = new RectangleElement(Canvas, e.GetPosition(Canvas),FillColor,2, new DoubleCollection());
-            }else if (Ellipse)
+                SelectedRectangle = new RectangleElement(Canvas, e.GetPosition(Canvas),FillColor,BorderColor,StrokeThickness, new DoubleCollection());
+                SelectedRectangle.Rectangle.MouseLeftButtonDown += RectangleMouseButtonDown;
+            }
+            else if (Ellipse)
             {
-
+                SelectedEllipse = new EllipseElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
+                SelectedEllipse.Ellipse.MouseLeftButtonDown += EllipseMouseButtonDown;
             }
             else if(Change)
             {
@@ -100,7 +120,9 @@ namespace VektorovyEditor.ViewModel
         {
             if (Line)
             {
-
+                if (SelectedLine == null)
+                    return;
+                SelectedLine.Draw(e.GetPosition(Canvas));
             }
             else if (Rectangle)
             {
@@ -110,7 +132,9 @@ namespace VektorovyEditor.ViewModel
             }
             else if (Ellipse)
             {
-
+                if (SelectedEllipse == null)
+                    return;
+                SelectedEllipse.DrawEllipse(e.GetPosition(Canvas));
             }
             else if (Change)
             {
@@ -122,7 +146,7 @@ namespace VektorovyEditor.ViewModel
         {
             if (Line)
             {
-
+                SelectedLine = null;
             }
             else if (Rectangle)
             {
@@ -130,7 +154,7 @@ namespace VektorovyEditor.ViewModel
             }
             else if (Ellipse)
             {
-
+                SelectedEllipse = null;
             }
             else if (Change)
             {
@@ -138,7 +162,23 @@ namespace VektorovyEditor.ViewModel
             }
         }
 
+        private void LineMouseButtonDown(object sende, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void RectangleMouseButtonDown(object sende, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void EllipseMouseButtonDown(object sende, MouseButtonEventArgs e)
+        {
+
+        }
+
         private Color _borderColor;
         private Color _fillColor;
+        private double _strokeThickness;
     }
 }

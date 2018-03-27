@@ -55,7 +55,7 @@
                             <Label Margin="0,0,5,0">Barva</Label>
                             <xctk:ColorPicker SelectedColor="{Binding BorderColor}" Width="60" Margin="0,0,5,0"></xctk:ColorPicker>
                             <ComboBox Margin="0,0,5,0" MinWidth="100"></ComboBox>
-                          <xctk:IntegerUpDown MinWidth="80" Name="myUpDownControl" />
+                            <xctk:IntegerUpDown Value="{Binding StrokeThickness}" MinWidth="80" Name="myUpDownControl" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

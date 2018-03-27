@@ -1,4 +1,4 @@
-﻿using System.Security.RightsManagement;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,9 +7,9 @@ using System.Windows.Shapes;
 
 namespace VektorovyEditor.Elements
 {
-    public class LineElement
+    public class EllipseElement
     {
-        public Line Line { get; set; }
+        public Ellipse Ellipse { get; set; }
         public Canvas Canvas { get; set; }
         public Point StartPoint { get; set; }
 
@@ -19,40 +19,44 @@ namespace VektorovyEditor.Elements
             set
             {
                 _zIndex = value;
-                Panel.SetZIndex(Line, value);
+                Panel.SetZIndex(Ellipse, value);
             }
         }
 
-        public LineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
+        public EllipseElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
         {
             Canvas = canvas;
             StartPoint = startPoint;
             SolidColorBrush border = new SolidColorBrush(borderColor);
             SolidColorBrush fill = new SolidColorBrush(fillColor);
 
-            Line = new Line
+            Ellipse = new Ellipse
             {
                 Stroke = border,
                 StrokeThickness = strokeThickness,
                 StrokeDashArray = doubleCollection,
-                Fill = fill,
-                X1 = StartPoint.X,
-                Y1 = StartPoint.Y,
-                X2 = StartPoint.X,
-                Y2 = StartPoint.Y,
-        };
+                Fill = fill
+            };
 
             ZIndex = 20;
-            canvas.Children.Add(Line);
+            canvas.Children.Add(Ellipse);
         }
 
-        public void Draw(Point pos)
+        public void DrawEllipse(Point pos)
         {
-            Line.X2 = pos.X;
-            Line.Y2 = pos.Y;
+            var x = Math.Min(pos.X, StartPoint.X);
+            var y = Math.Min(pos.Y, StartPoint.Y);
+
+            var w = Math.Max(pos.X, StartPoint.X) - x;
+            var h = Math.Max(pos.Y, StartPoint.Y) - y;
+
+            Ellipse.Width = w;
+            Ellipse.Height = h;
+
+            Canvas.SetLeft(Ellipse, x);
+            Canvas.SetTop(Ellipse, y);
         }
 
         private int _zIndex;
-
     }
 }

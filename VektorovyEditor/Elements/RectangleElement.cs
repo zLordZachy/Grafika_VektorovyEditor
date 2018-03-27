@@ -22,17 +22,19 @@ namespace VektorovyEditor.Elements
             }
         }
 
-        public RectangleElement(Canvas canvas, Point startPoint, Color color, double strokeThickness, DoubleCollection doubleCollection )
+        public RectangleElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
         {
             Canvas = canvas;
             StartPoint = startPoint;
-            SolidColorBrush brush = new SolidColorBrush(color);
+            SolidColorBrush border = new SolidColorBrush(borderColor);
+            SolidColorBrush fill = new SolidColorBrush(fillColor);
+
             Rectangle = new Rectangle
             {
-                Stroke = Brushes.DarkBlue,
+                Stroke = border,
                 StrokeThickness = strokeThickness,
                 StrokeDashArray = doubleCollection,
-                Fill = brush
+                Fill = fill
             };
             ZIndex = 20;
             canvas.Children.Add(Rectangle);
