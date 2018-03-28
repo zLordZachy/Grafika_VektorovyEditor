@@ -3,10 +3,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using VektorovyEditor.Elements;
 using VektorovyEditor.helpers;
-using Xceed.Wpf.Toolkit;
 
 namespace VektorovyEditor.ViewModel
 {
@@ -46,6 +44,7 @@ namespace VektorovyEditor.ViewModel
         #endregion
 
         public bool Line { get; set; }
+        public bool PolyLine { get; set; }
         public bool Rectangle { get; set; }
         public bool Ellipse { get; set; }
         public bool Change { get; set; }
@@ -57,6 +56,7 @@ namespace VektorovyEditor.ViewModel
         public RectangleElement SelectedRectangle { get; set; }
         public EllipseElement SelectedEllipse { get; set; }
         public LineElement SelectedLine { get; set; }
+        public PolyLineElement SelectedPolyLine { get; set; }
 
 
         #endregion
@@ -98,6 +98,9 @@ namespace VektorovyEditor.ViewModel
             {
                 SelectedLine = new LineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
                 SelectedLine.Line.MouseLeftButtonDown += LineMouseButtonDown;
+            }else if (PolyLine)
+            {
+                SelectedPolyLine = new PolyLineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
             }
             else if(Rectangle)
             {
@@ -116,6 +119,7 @@ namespace VektorovyEditor.ViewModel
 
         }
 
+
         private void CanvasMouseMove(object sender, MouseEventArgs e)
         {
             if (Line)
@@ -123,6 +127,12 @@ namespace VektorovyEditor.ViewModel
                 if (SelectedLine == null)
                     return;
                 SelectedLine.Draw(e.GetPosition(Canvas));
+            }
+            else if (PolyLine)
+            {
+                if (SelectedPolyLine == null)
+                    return;
+                SelectedPolyLine.Draw(e.GetPosition(Canvas));
             }
             else if (Rectangle)
             {
@@ -147,6 +157,10 @@ namespace VektorovyEditor.ViewModel
             if (Line)
             {
                 SelectedLine = null;
+            }
+            else if (PolyLine)
+            {
+                SelectedPolyLine = null;
             }
             else if (Rectangle)
             {

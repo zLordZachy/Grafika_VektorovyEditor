@@ -5,11 +5,12 @@ using System.Windows.Shapes;
 
 namespace VektorovyEditor.Elements
 {
-    public class LineElement
+    public class PolyLineElement
     {
-        public Line Line { get; set; }
+        public Polyline PolyLine { get; set; }
         public Canvas Canvas { get; set; }
         public Point StartPoint { get; set; }
+        public PointCollection Points { get; set; }
 
         public int ZIndex
         {
@@ -17,37 +18,35 @@ namespace VektorovyEditor.Elements
             set
             {
                 _zIndex = value;
-                Panel.SetZIndex(Line, value);
+                Panel.SetZIndex(PolyLine, value);
             }
         }
 
-        public LineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
+        public PolyLineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
         {
             Canvas = canvas;
             StartPoint = startPoint;
             SolidColorBrush border = new SolidColorBrush(borderColor);
             SolidColorBrush fill = new SolidColorBrush(fillColor);
+            Points = new PointCollection();
+            Points.Add(startPoint);
 
-            Line = new Line
+            PolyLine = new Polyline()
             {
                 Stroke = border,
                 StrokeThickness = strokeThickness,
                 StrokeDashArray = doubleCollection,
                 Fill = fill,
-                X1 = StartPoint.X,
-                Y1 = StartPoint.Y,
-                X2 = StartPoint.X,
-                Y2 = StartPoint.Y,
-        };
+                Points = Points
+            };
 
             ZIndex = 20;
-            canvas.Children.Add(Line);
+            canvas.Children.Add(PolyLine);
         }
 
-        public void Draw(Point pos)
+        public void Draw(Point point)
         {
-            Line.X2 = pos.X;
-            Line.Y2 = pos.Y;
+           Points.Add(point);
         }
 
         private int _zIndex;
