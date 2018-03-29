@@ -5,51 +5,38 @@ using System.Windows.Shapes;
 
 namespace VektorovyEditor.Elements
 {
-    public class PolyLineElement
+    public class PolyLineElement : BaseElement
     {
         public Polyline PolyLine { get; set; }
-        public Canvas Canvas { get; set; }
-        public Point StartPoint { get; set; }
         public PointCollection Points { get; set; }
 
-        public int ZIndex
-        {
-            get => _zIndex;
-            set
-            {
-                _zIndex = value;
-                Panel.SetZIndex(PolyLine, value);
-            }
-        }
 
         public PolyLineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
+            : base(canvas,fillColor,borderColor, strokeThickness, doubleCollection,startPoint)
         {
-            Canvas = canvas;
-            StartPoint = startPoint;
-            SolidColorBrush border = new SolidColorBrush(borderColor);
-            SolidColorBrush fill = new SolidColorBrush(fillColor);
-            Points = new PointCollection();
-            Points.Add(startPoint);
+            Points = new PointCollection {StartPoint};
 
             PolyLine = new Polyline()
             {
-                Stroke = border,
-                StrokeThickness = strokeThickness,
-                StrokeDashArray = doubleCollection,
-                Fill = fill,
+                Stroke = ColorBorder,
+                StrokeThickness = StrokeThickness,
+                StrokeDashArray = Doush,
+                Fill = ColorFill,
                 Points = Points
             };
 
-            ZIndex = 20;
-            canvas.Children.Add(PolyLine);
+           canvas.Children.Add(PolyLine);
         }
 
-        public void Draw(Point point)
+        public override void Draw(Point point)
         {
            Points.Add(point);
+           base.Draw(point);
         }
 
-        private int _zIndex;
-
+        protected override void SetZIndex(int value)
+        {
+            Panel.SetZIndex(PolyLine, value);
+        }
     }
 }

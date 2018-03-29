@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Elements\BaseElement.cs" />
     <Compile Include="Elements\EllipseElement.cs" />
     <Compile Include="Elements\LineElement.cs" />
     <Compile Include="Elements\PolyLineElement.cs" />

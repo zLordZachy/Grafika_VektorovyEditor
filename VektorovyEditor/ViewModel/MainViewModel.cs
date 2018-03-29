@@ -144,7 +144,7 @@ namespace VektorovyEditor.ViewModel
             {
                 if (SelectedEllipse == null)
                     return;
-                SelectedEllipse.DrawEllipse(e.GetPosition(Canvas));
+                SelectedEllipse.Draw(e.GetPosition(Canvas));
             }
             else if (Change)
             {

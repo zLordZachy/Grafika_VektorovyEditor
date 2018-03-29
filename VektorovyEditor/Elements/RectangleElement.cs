@@ -6,55 +6,47 @@ using System.Windows.Shapes;
 
 namespace VektorovyEditor.Elements
 {
-    public class RectangleElement
+    public class RectangleElement : BaseElement
     {
         public Rectangle Rectangle { get; set; }
-        public Canvas Canvas { get; set; }
-        public Point StartPoint { get; set; }
-
-        public int ZIndex
-        {
-            get => _zIndex;
-            set
-            {
-                _zIndex = value;
-                Panel.SetZIndex(Rectangle, value);
-            }
-        }
 
         public RectangleElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
+            : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
         {
-            Canvas = canvas;
-            StartPoint = startPoint;
-            SolidColorBrush border = new SolidColorBrush(borderColor);
-            SolidColorBrush fill = new SolidColorBrush(fillColor);
-
-            Rectangle = new Rectangle
+           Rectangle = new Rectangle
             {
-                Stroke = border,
-                StrokeThickness = strokeThickness,
-                StrokeDashArray = doubleCollection,
-                Fill = fill
+                Stroke = ColorBorder,
+                StrokeThickness = StrokeThickness,
+                StrokeDashArray = Doush,
+                Fill = ColorFill,
+                
+               
             };
             ZIndex = 20;
             canvas.Children.Add(Rectangle);
         }
 
-        public void DrawRectangle(Point pos)
+        public void DrawRectangle(Point point)
         {
-            var x = Math.Min(pos.X, StartPoint.X);
-            var y = Math.Min(pos.Y, StartPoint.Y);
+            var x = Math.Min(point.X, StartPoint.X);
+            var y = Math.Min(point.Y, StartPoint.Y);
 
-            var w = Math.Max(pos.X, StartPoint.X) - x;
-            var h = Math.Max(pos.Y, StartPoint.Y) - y;
+            var w = Math.Max(point.X, StartPoint.X) - x;
+            var h = Math.Max(point.Y, StartPoint.Y) - y;
 
             Rectangle.Width = w;
             Rectangle.Height = h;
 
+            StartPoint = new Point(x,y);
+            
             Canvas.SetLeft(Rectangle, x);
             Canvas.SetTop(Rectangle, y);
+            base.Draw(point);
         }
 
-        private int _zIndex;
+        protected override void SetZIndex(int value)
+        {
+            Panel.SetZIndex(Rectangle, value);
+        }
     }
 }

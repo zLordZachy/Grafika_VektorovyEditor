@@ -5,52 +5,39 @@ using System.Windows.Shapes;
 
 namespace VektorovyEditor.Elements
 {
-    public class LineElement
+    public class LineElement : BaseElement
     {
         public Line Line { get; set; }
-        public Canvas Canvas { get; set; }
-        public Point StartPoint { get; set; }
-
-        public int ZIndex
-        {
-            get => _zIndex;
-            set
-            {
-                _zIndex = value;
-                Panel.SetZIndex(Line, value);
-            }
-        }
-
+  
         public LineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
+            : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
         {
-            Canvas = canvas;
-            StartPoint = startPoint;
-            SolidColorBrush border = new SolidColorBrush(borderColor);
-            SolidColorBrush fill = new SolidColorBrush(fillColor);
-
             Line = new Line
             {
-                Stroke = border,
-                StrokeThickness = strokeThickness,
-                StrokeDashArray = doubleCollection,
-                Fill = fill,
+                Stroke = ColorBorder,
+                StrokeThickness = StrokeThickness,
+                StrokeDashArray = Doush,
+                Fill = ColorFill,
                 X1 = StartPoint.X,
                 Y1 = StartPoint.Y,
                 X2 = StartPoint.X,
                 Y2 = StartPoint.Y,
-        };
+            };
 
-            ZIndex = 20;
+            ZIndex = 50;
             canvas.Children.Add(Line);
         }
 
-        public void Draw(Point pos)
+        public override void Draw(Point point)
         {
-            Line.X2 = pos.X;
-            Line.Y2 = pos.Y;
+            Line.X2 = point.X;
+            Line.Y2 = point.Y;
+            base.Draw(point);
         }
 
-        private int _zIndex;
-
+        protected override void SetZIndex(int value)
+        {
+            Panel.SetZIndex(Line, value);
+        }
     }
 }

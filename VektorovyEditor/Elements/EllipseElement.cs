@@ -7,56 +7,43 @@ using System.Windows.Shapes;
 
 namespace VektorovyEditor.Elements
 {
-    public class EllipseElement
+    public class EllipseElement : BaseElement
     {
         public Ellipse Ellipse { get; set; }
-        public Canvas Canvas { get; set; }
-        public Point StartPoint { get; set; }
 
-        public int ZIndex
+        public EllipseElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection) 
+            : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
         {
-            get => _zIndex;
-            set
-            {
-                _zIndex = value;
-                Panel.SetZIndex(Ellipse, value);
-            }
-        }
-
-        public EllipseElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
-        {
-            Canvas = canvas;
-            StartPoint = startPoint;
-            SolidColorBrush border = new SolidColorBrush(borderColor);
-            SolidColorBrush fill = new SolidColorBrush(fillColor);
-
             Ellipse = new Ellipse
             {
-                Stroke = border,
-                StrokeThickness = strokeThickness,
-                StrokeDashArray = doubleCollection,
-                Fill = fill
+                Stroke = ColorBorder,
+                StrokeThickness = StrokeThickness,
+                StrokeDashArray = Doush,
+                Fill = ColorFill
             };
 
-            ZIndex = 20;
             canvas.Children.Add(Ellipse);
         }
 
-        public void DrawEllipse(Point pos)
+        public override void Draw(Point point)
         {
-            var x = Math.Min(pos.X, StartPoint.X);
-            var y = Math.Min(pos.Y, StartPoint.Y);
+            var x = Math.Min(point.X, StartPoint.X);
+            var y = Math.Min(point.Y, StartPoint.Y);
 
-            var w = Math.Max(pos.X, StartPoint.X) - x;
-            var h = Math.Max(pos.Y, StartPoint.Y) - y;
+            var w = Math.Max(point.X, StartPoint.X) - x;
+            var h = Math.Max(point.Y, StartPoint.Y) - y;
 
             Ellipse.Width = w;
             Ellipse.Height = h;
 
             Canvas.SetLeft(Ellipse, x);
             Canvas.SetTop(Ellipse, y);
+            base.Draw(point);
         }
 
-        private int _zIndex;
+        protected override void SetZIndex(int value)
+        {
+            Panel.SetZIndex(Ellipse, value);
+        }
     }
 }
