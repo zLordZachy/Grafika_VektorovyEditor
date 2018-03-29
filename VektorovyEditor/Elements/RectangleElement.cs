@@ -11,7 +11,7 @@ namespace VektorovyEditor.Elements
         public Rectangle Rectangle { get; set; }
 
         public RectangleElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
-            : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
+        : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
         {
            Rectangle = new Rectangle
             {
@@ -19,14 +19,12 @@ namespace VektorovyEditor.Elements
                 StrokeThickness = StrokeThickness,
                 StrokeDashArray = Doush,
                 Fill = ColorFill,
-                
-               
             };
             ZIndex = 20;
             canvas.Children.Add(Rectangle);
         }
 
-        public void DrawRectangle(Point point)
+        public override void Draw(Point point)
         {
             var x = Math.Min(point.X, StartPoint.X);
             var y = Math.Min(point.Y, StartPoint.Y);

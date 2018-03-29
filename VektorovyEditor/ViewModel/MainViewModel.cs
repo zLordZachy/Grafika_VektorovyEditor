@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using VektorovyEditor.Elements;
 using VektorovyEditor.helpers;
 
@@ -58,6 +61,8 @@ namespace VektorovyEditor.ViewModel
         public LineElement SelectedLine { get; set; }
         public PolyLineElement SelectedPolyLine { get; set; }
 
+        public IList<BaseElement> Elements { get; set; }
+        public BaseElement EditedElement { get; set; }
 
         #endregion
 
@@ -68,6 +73,7 @@ namespace VektorovyEditor.ViewModel
         {
             BorderColor = Colors.BlueViolet;
             FillColor = Colors.GreenYellow;
+            Elements = new List<BaseElement>();
             StrokeThickness = 2;
             Canvas = baseCanvas;
             Canvas.MouseLeftButtonDown += CanvasMouseLeftButtonDown;
@@ -94,23 +100,32 @@ namespace VektorovyEditor.ViewModel
 
         public void CanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if(e.ClickCount!=1)
+                return;
+
             if (Line)
             {
                 SelectedLine = new LineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
                 SelectedLine.Line.MouseLeftButtonDown += LineMouseButtonDown;
+                Elements.Add(SelectedLine);
             }else if (PolyLine)
             {
                 SelectedPolyLine = new PolyLineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
+                Elements.Add(SelectedPolyLine);
+
             }
             else if(Rectangle)
             {
                 SelectedRectangle = new RectangleElement(Canvas, e.GetPosition(Canvas),FillColor,BorderColor,StrokeThickness, new DoubleCollection());
                 SelectedRectangle.Rectangle.MouseLeftButtonDown += RectangleMouseButtonDown;
+                Elements.Add(SelectedRectangle);
+
             }
             else if (Ellipse)
             {
                 SelectedEllipse = new EllipseElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
                 SelectedEllipse.Ellipse.MouseLeftButtonDown += EllipseMouseButtonDown;
+                Elements.Add(SelectedEllipse);
             }
             else if(Change)
             {
@@ -138,7 +153,7 @@ namespace VektorovyEditor.ViewModel
             {
                 if(SelectedRectangle == null)
                     return;
-                SelectedRectangle.DrawRectangle(e.GetPosition(Canvas));
+                SelectedRectangle.Draw(e.GetPosition(Canvas));
             }
             else if (Ellipse)
             {
@@ -178,17 +193,67 @@ namespace VektorovyEditor.ViewModel
 
         private void LineMouseButtonDown(object sende, MouseButtonEventArgs e)
         {
+            if (e.ClickCount == 2)
+            {
 
+                var editline = Elements.Where(x => x.GetType() == typeof(LineElement)).ToList();
+                LineElement editeLineElement = (LineElement)editline.FirstOrDefault(x => Equals(((LineElement)x).Line, sende as Line));
+
+                if (editeLineElement == null)
+                    return;
+
+                SetEdite(editeLineElement);
+            }
         }
+
+      
 
         private void RectangleMouseButtonDown(object sende, MouseButtonEventArgs e)
         {
+            if (e.ClickCount == 2)
+            {
 
+                var editRectangle = Elements.Where(x => x.GetType() == typeof(RectangleElement)).ToList();
+                RectangleElement editeRectangleElement = (RectangleElement)editRectangle.FirstOrDefault(x => Equals(((RectangleElement)x).Rectangle, sende as Rectangle));
+
+                if (editeRectangleElement == null)
+                    return;
+
+                SetEdite(editeRectangleElement);
+            }
         }
 
         private void EllipseMouseButtonDown(object sende, MouseButtonEventArgs e)
         {
+            if (e.ClickCount == 2)
+            {
 
+                var editEllipse =  Elements.Where(x => x.GetType() == typeof(EllipseElement)).ToList();
+                EllipseElement editeEllipseElement = (EllipseElement)  editEllipse.FirstOrDefault(x => Equals(((EllipseElement) x).Ellipse, sende as Ellipse));
+                
+                if(editeEllipseElement== null)
+                    return;
+
+                SetEdite(editeEllipseElement);
+            }
+        }
+        private void SetEdite(BaseElement editeLineElement)
+        {
+            if (editeLineElement == null)
+                return;
+
+            if (EditedElement != null && EditedElement.Equals(editeLineElement))
+            {
+                editeLineElement.EndEdit();
+                EditedElement = null;
+            }
+            else
+            {
+                EditedElement?.EndEdit();
+
+                editeLineElement.Edit();
+                EditedElement = editeLineElement;
+            }
         }
 
         private Color _borderColor;

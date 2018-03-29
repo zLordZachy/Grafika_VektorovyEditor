@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -14,6 +15,8 @@ namespace VektorovyEditor.Elements
 
         public Point StartPoint { get; set; }
         public Point EndPoint { get; set; }
+
+        public RectangleElement RectangleEdit { get; set; }
 
         public int ZIndex
         {
@@ -38,8 +41,26 @@ namespace VektorovyEditor.Elements
 
         public virtual void Draw(Point point)
         {
-
             EndPoint = point;
+            Debug.WriteLine($"x: {point.X} y: {point.Y}");
+        }
+
+        public virtual void Edit()
+        {
+            RectangleEdit =
+                new RectangleElement(Canvas, StartPoint, Colors.Transparent, Colors.Black, 3, new DoubleCollection{1,1,1,1,1,1});
+            RectangleEdit.Rectangle.Fill = null;
+            RectangleEdit.Draw(EndPoint);
+            RectangleEdit.SetZIndex(100);
+        }
+
+        public virtual void EndEdit()
+        {
+            if (RectangleEdit != null)
+            {
+                Canvas.Children.Remove(RectangleEdit.Rectangle);
+                RectangleEdit = null;
+            }
         }
 
         protected virtual void SetZIndex(int value)

@@ -12,7 +12,7 @@ namespace VektorovyEditor.Elements
 
 
         public PolyLineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
-            : base(canvas,fillColor,borderColor, strokeThickness, doubleCollection,startPoint)
+        : base(canvas,fillColor,borderColor, strokeThickness, doubleCollection,startPoint)
         {
             Points = new PointCollection {StartPoint};
 

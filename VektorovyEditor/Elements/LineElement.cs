@@ -10,7 +10,7 @@ namespace VektorovyEditor.Elements
         public Line Line { get; set; }
   
         public LineElement(Canvas canvas, Point startPoint, Color fillColor, Color borderColor, double strokeThickness, DoubleCollection doubleCollection)
-            : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
+        : base(canvas, fillColor, borderColor, strokeThickness, doubleCollection, startPoint)
         {
             Line = new Line
             {
