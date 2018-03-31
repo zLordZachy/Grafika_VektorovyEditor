@@ -40,6 +40,15 @@ namespace VektorovyEditor.Elements
             base.Delet();
         }
 
+        public override void SetWidth(double velikost)
+        {
+            for (var index = 0; index < Points.Count; index++)
+            {
+                Point point = Points[index];
+                point.X = point.X + velikost;
+            }
+        }
+
         public override void Edit()
         {
             Point min = new Point { X = Points.Min(x => x.X), Y = Points.Min(y => y.Y) };

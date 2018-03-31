@@ -40,6 +40,10 @@ namespace VektorovyEditor.Elements
         public bool Is6Editing { get; set; }
         private bool Is8Editing { get; set; }
 
+        public bool Is1Editing { get; set; }
+        public bool Is3Editing { get; set; }
+        public bool Is5Editing { get; set; }
+        public bool Is7Editing { get; set; }
 
         private Point OriginPoint { get; set; }
 
@@ -123,6 +127,12 @@ namespace VektorovyEditor.Elements
             Rectangle6.Rectangle.MouseLeftButtonDown += LeftButtonDown;
             Rectangle2.Rectangle.MouseLeftButtonDown += LeftButtonDown;
 
+            Rectangle1.Rectangle.MouseLeftButtonDown += LeftButtonDown;
+            Rectangle3.Rectangle.MouseLeftButtonDown += LeftButtonDown;
+            Rectangle5.Rectangle.MouseLeftButtonDown += LeftButtonDown;
+            Rectangle7.Rectangle.MouseLeftButtonDown += LeftButtonDown;
+
+
             Canvas.MouseLeftButtonUp += LeftButtonUp;
             Canvas.MouseMove += MouseMove;
         }
@@ -133,6 +143,11 @@ namespace VektorovyEditor.Elements
             Is4Editing = false;
             Is6Editing = false;
             Is8Editing = false;
+
+            Is1Editing = false;
+            Is3Editing = false;
+            Is5Editing = false;
+            Is7Editing = false;
 
         }
 
@@ -179,6 +194,46 @@ namespace VektorovyEditor.Elements
                     SetLeft(left + disc);
                     SetWidth(width - disc);
                 }
+                else if (Is1Editing)
+                {
+                    double discY = e.GetPosition(Canvas).X - OriginPoint.X;
+                    double discX = e.GetPosition(Canvas).Y - OriginPoint.Y;
+
+                    SetTop(top + discX);
+                    SetHeight(height - discX);
+
+                    SetLeft(left + discY);
+                    SetWidth(width - discY);
+                }
+                else if (Is3Editing)
+                {
+                    double discY = e.GetPosition(Canvas).X - OriginPoint.X;
+                    double discX = e.GetPosition(Canvas).Y - OriginPoint.Y;
+
+                    SetTop(top + discX);
+                    SetHeight(height - discX);
+
+                    SetWidth(width + discY);
+                }
+                else if (Is5Editing)
+                {
+                    double discY = e.GetPosition(Canvas).X - OriginPoint.X;
+                    double discX = e.GetPosition(Canvas).Y - OriginPoint.Y;
+
+                    SetHeight(height + discX);
+
+                    SetWidth(width + discY);
+                }
+                else if (Is7Editing)
+                {
+                    double discY = e.GetPosition(Canvas).X - OriginPoint.X;
+                    double discX = e.GetPosition(Canvas).Y - OriginPoint.Y;
+
+                    SetHeight(height + discX);
+
+                    SetLeft(left + discY);
+                    SetWidth(width - discY);
+                }
         }
 
 
@@ -224,16 +279,32 @@ namespace VektorovyEditor.Elements
             {
                 Is8Editing = true;
             }
+            else if (Rectangle1.Rectangle.Equals(rectangele))
+            {
+                Is1Editing = true;
+            }
+            else if (Rectangle3.Rectangle.Equals(rectangele))
+            {
+                Is3Editing = true;
+            }
+            else if (Rectangle5.Rectangle.Equals(rectangele))
+            {
+                Is5Editing = true;
+            }
+            else if (Rectangle7.Rectangle.Equals(rectangele))
+            {
+                Is7Editing = true;
+            }
         }
 
-       
+
 
         public virtual void EndEdit()
         {
             if (RectangleEditBase != null)
             {
-                Canvas.Children.Remove(RectangleEditBase.Rectangle);
-                RectangleEditBase = null;
+               if(Rectangle1==null)
+                   return;
 
                 Canvas.Children.Remove(Rectangle1.Rectangle);
                 Rectangle1 = null;
@@ -251,6 +322,9 @@ namespace VektorovyEditor.Elements
                 Rectangle7 = null;
                 Canvas.Children.Remove(Rectangle8.Rectangle);
                 Rectangle8 = null;
+
+                Canvas.Children.Remove(RectangleEditBase.Rectangle);
+                RectangleEditBase = null;
 
             }
         }
