@@ -76,6 +76,7 @@
     <Compile Include="Elements\EllipseElement.cs" />
     <Compile Include="Elements\LineElement.cs" />
     <Compile Include="Elements\PolyLineElement.cs" />
+    <Compile Include="Elements\RectangleEditElement.cs" />
     <Compile Include="Elements\RectangleElement.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="helpers\ZCommand.cs" />

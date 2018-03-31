@@ -35,6 +35,24 @@ namespace VektorovyEditor.Elements
             base.Draw(point);
         }
 
+        public override void Delet()
+        {
+            Canvas.Children.Remove(Line);
+            base.Delet();
+        }
+
+        public override void Move(Point point)
+        {
+            //var newX = (StartPoint.X + ((point.X ) - StartPoint.X));
+            //var newY = (StartPoint.Y + ((point.Y ) - StartPoint.Y));
+
+            //var newX2 = (EndPoint.X + ((point.X ) - EndPoint.X));
+            //var newY2 = (EndPoint.Y + ((point.Y ) - EndPoint.Y));
+            //Point offset = new Point((StartPoint.X - EndPoint.X), (StartPoint.Y - EndPoint.Y));
+            //double canvasTop = newY - offset.Y;
+            //double canvasLeft = newX - offset.X;
+         }
+
         protected override void SetZIndex(int value)
         {
             Panel.SetZIndex(Line, value);

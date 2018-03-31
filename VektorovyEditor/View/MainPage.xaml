@@ -32,9 +32,9 @@
             <RadioButton GroupName="Panel" IsChecked="{Binding Change}" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0" Width="70">
                 Uprav
             </RadioButton>
-            <RadioButton GroupName="Panel" IsChecked="{Binding Delet}" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,0,5,0" Width="70">
+            <Button  Command="{Binding DeleteElementCommand}"  Margin="0,0,5,0" Width="70">
                 Smaž
-            </RadioButton>
+            </Button>
         </StackPanel>
         <Canvas Name="BaseCanvas"  Grid.Column="0"  Grid.Row="1" Background="Azure">
           
