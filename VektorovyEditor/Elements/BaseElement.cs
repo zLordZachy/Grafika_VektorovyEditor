@@ -13,7 +13,23 @@ namespace VektorovyEditor.Elements
         public Canvas Canvas { get; set; }
         public SolidColorBrush ColorFill { get; set; }
         public SolidColorBrush ColorBorder { get; set; }
-        public double StrokeThickness { get; set; }
+        public bool IsShaped { get; set; }
+
+        public double StrokeThickness
+        {
+            get => _strokeThickness;
+            set
+            {
+                _strokeThickness = value;
+                Setstroke(StrokeThickness);
+            }
+        }
+
+        public virtual void Setstroke(double strokeThickness)
+        {
+           
+        }
+
         public DoubleCollection Doush { get; set; }
 
         public double? Left { get; set; }
@@ -37,13 +53,13 @@ namespace VektorovyEditor.Elements
         private bool Is2Editing { get; set; }
 
         private bool Is4Editing { get; set; }
-        public bool Is6Editing { get; set; }
+        private bool Is6Editing { get; set; }
         private bool Is8Editing { get; set; }
 
-        public bool Is1Editing { get; set; }
-        public bool Is3Editing { get; set; }
-        public bool Is5Editing { get; set; }
-        public bool Is7Editing { get; set; }
+        private bool Is1Editing { get; set; }
+        private bool Is3Editing { get; set; }
+        private bool Is5Editing { get; set; }
+        private bool Is7Editing { get; set; }
 
         private Point OriginPoint { get; set; }
 
@@ -94,33 +110,46 @@ namespace VektorovyEditor.Elements
                 RectangleEditBase.StartPoint = new Point(Left.Value, Top.Value);
             }
 
-
             Rectangle1 = new RectangleElement(Canvas, new Point{X= RectangleEditBase.StartPoint.X-5, Y = RectangleEditBase.StartPoint.Y-5}, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle1.Draw(new Point{X = RectangleEditBase.StartPoint.X + 10, Y = RectangleEditBase.StartPoint.Y +10});
+            Rectangle1.SetZIndex(101);
 
             var RectEditWidth = RectangleEditBase.Rectangle.Width;
             var RectEditHeight = RectangleEditBase.Rectangle.Height;
 
             Rectangle2 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + RectEditWidth/2 - 5, Y = RectangleEditBase.StartPoint.Y - 5 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle2.Draw(new Point { X = Rectangle2.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y + 10 });
+            Rectangle2.SetZIndex(101);
 
             Rectangle3 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + RectEditWidth - 10, Y = RectangleEditBase.StartPoint.Y - 5 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle3.Draw(new Point { X = Rectangle3.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y+ 10 });
+            Rectangle3.SetZIndex(101);
+
 
             Rectangle4 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + RectEditWidth - 10, Y = RectangleEditBase.StartPoint.Y+RectEditHeight/2 - 5 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle4.Draw(new Point { X = Rectangle4.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y + RectEditHeight / 2 + 10 });
+            Rectangle4.SetZIndex(101);
+
 
             Rectangle5 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + RectEditWidth - 10, Y = RectangleEditBase.StartPoint.Y + RectEditHeight  - 10 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle5.Draw(new Point { X = Rectangle5.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y + RectEditHeight  + 5 });
+            Rectangle5.SetZIndex(101);
+
 
             Rectangle6 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + RectEditWidth / 2 - 5, Y = RectangleEditBase.StartPoint.Y + RectEditHeight - 10 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle6.Draw(new Point { X = Rectangle6.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y + RectEditHeight + 5 });
+            Rectangle6.SetZIndex(101);
+
 
             Rectangle7 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + - 5, Y = RectangleEditBase.StartPoint.Y + RectEditHeight - 10 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle7.Draw(new Point { X = Rectangle7.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y + RectEditHeight + 5 });
+            Rectangle7.SetZIndex(101);
+
 
             Rectangle8 = new RectangleElement(Canvas, new Point { X = RectangleEditBase.StartPoint.X + -5, Y = RectangleEditBase.StartPoint.Y + RectEditHeight / 2 - 5 }, Colors.Black, Colors.Black, 3, new DoubleCollection());
             Rectangle8.Draw(new Point { X = Rectangle8.StartPoint.X + 15, Y = RectangleEditBase.StartPoint.Y + RectEditHeight / 2 + 10 });
+            Rectangle8.SetZIndex(101);
+
 
             Rectangle8.Rectangle.MouseLeftButtonDown += LeftButtonDown;
             Rectangle4.Rectangle.MouseLeftButtonDown += LeftButtonDown;
@@ -132,10 +161,11 @@ namespace VektorovyEditor.Elements
             Rectangle5.Rectangle.MouseLeftButtonDown += LeftButtonDown;
             Rectangle7.Rectangle.MouseLeftButtonDown += LeftButtonDown;
 
-
             Canvas.MouseLeftButtonUp += LeftButtonUp;
             Canvas.MouseMove += MouseMove;
         }
+
+       
 
         private void LeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -344,7 +374,31 @@ namespace VektorovyEditor.Elements
                 EndEdit();
         }
 
-        private int _zIndex;
+        public virtual void SetFillBrush(Brush brush)
+        {
+            if (brush is SolidColorBrush)
+            {
+                var color = (brush as SolidColorBrush);
+                ColorFill = color;
+                IsShaped = false;
+            }
+            else
+            {
+                IsShaped = true;
+            }
+        }
 
+        public virtual void SetBorderBrush(Brush brush)
+        {
+            if (brush is SolidColorBrush)
+            {
+                var color = (brush as SolidColorBrush);
+                ColorBorder = color;
+            }
+        }
+
+
+        private int _zIndex;
+        private double _strokeThickness;
     }
 }

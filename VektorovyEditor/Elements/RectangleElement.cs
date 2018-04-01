@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using LinearGradientBrush = System.Windows.Media.LinearGradientBrush;
 
 namespace VektorovyEditor.Elements
 {
@@ -95,7 +96,27 @@ namespace VektorovyEditor.Elements
             base.SetLeft(velikost);
         }
 
+        public override void SetFillBrush(Brush brush)
+        {
+            Rectangle.Fill = brush;
+            base.SetFillBrush(brush);
 
+        }
+
+        public override void Setstroke(double strokeThickness)
+        {
+            if (Rectangle == null)
+                return;
+            Rectangle.StrokeThickness = strokeThickness;
+        }
+
+
+        public override void SetBorderBrush(Brush brush)
+        {
+            Rectangle.Stroke = brush;
+            base.SetBorderBrush(brush);
+
+        }
 
         protected override void SetZIndex(int value)
         {

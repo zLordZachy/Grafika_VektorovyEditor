@@ -65,6 +65,14 @@ namespace VektorovyEditor.Elements
 
         }
 
+        public override void Setstroke(double strokeThickness)
+        {
+            if (Rectangle == null)
+                return;
+            Rectangle.StrokeThickness = strokeThickness;
+        }
+
+
 
         protected override void SetZIndex(int value)
         {

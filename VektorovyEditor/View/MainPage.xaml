@@ -65,15 +65,15 @@
                 <GroupBox Grid.Column="1" Header="Výplň" HorizontalAlignment="Stretch" Margin="10">
                     <StackPanel Orientation="Vertical" Margin="5" VerticalAlignment="Center">
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="5">
-                            <RadioButton GroupName="vypln"  Margin="0,0,5,0" >Bez výplně</RadioButton>
-                            <RadioButton GroupName="vypln"  Margin="0,0,5,0" >Jednotná bílá</RadioButton>
-                            <RadioButton GroupName="vypln"  Margin="0,0,5,0" >Šrafování</RadioButton>
+                            <RadioButton GroupName="vypln" IsChecked="{Binding Empty}"  Margin="0,0,5,0" >Bez výplně</RadioButton>
+                            <RadioButton GroupName="vypln"  IsChecked="{Binding Color}" Margin="0,0,5,0" >Jednotná barva</RadioButton>
+                            <RadioButton GroupName="vypln"  IsChecked="{Binding Shape}"  Margin="0,0,5,0" >Šrafování</RadioButton>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" Margin="5">
                             <Label Margin="0,0,5,0">Barva</Label>
-                            <xctk:ColorPicker SelectedColor="{Binding FillColor}" Width="60"></xctk:ColorPicker>
-                            <Label Margin="0,0,5,0">Barva pozadí</Label>
-                            <ComboBox Margin="0,0,5,0" MinWidth="100"></ComboBox>
+                            <xctk:ColorPicker SelectedColor="{Binding FillColor}"  Width="60"></xctk:ColorPicker>
+                            <Label Margin="0,0,5,0">vzor pozadí</Label>
+                            <ComboBox Margin="0,0,5,0" IsEnabled="{Binding Shape}" ItemsSource="{Binding MyShapes}" SelectedItem="{Binding SelectedShape}" MinWidth="100"></ComboBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

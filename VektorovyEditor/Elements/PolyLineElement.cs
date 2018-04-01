@@ -62,6 +62,27 @@ namespace VektorovyEditor.Elements
             RectangleEditBase.ZIndex = 100;
         }
 
+        public override void SetFillBrush(Brush brush)
+        {
+            PolyLine.Fill = brush;
+            base.SetFillBrush(brush);
+
+        }
+
+        public override void Setstroke(double strokeThickness)
+        {
+            if (PolyLine == null)
+                return;
+            PolyLine.StrokeThickness = strokeThickness;
+        }
+
+        public override void SetBorderBrush(Brush brush)
+        {
+            PolyLine.Stroke = brush;
+            base.SetBorderBrush(brush);
+
+        }
+
         protected override void SetZIndex(int value)
         {
             Panel.SetZIndex(PolyLine, value);

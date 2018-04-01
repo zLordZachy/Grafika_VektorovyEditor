@@ -53,6 +53,19 @@ namespace VektorovyEditor.Elements
             //double canvasLeft = newX - offset.X;
          }
 
+        public override void Setstroke(double strokeThickness)
+        {
+            if(Line==null)
+                return;
+            Line.StrokeThickness = strokeThickness;
+        }
+        public override void SetBorderBrush(Brush brush)
+        {
+            Line.Stroke = brush;
+            base.SetBorderBrush(brush);
+
+        }
+
         protected override void SetZIndex(int value)
         {
             Panel.SetZIndex(Line, value);

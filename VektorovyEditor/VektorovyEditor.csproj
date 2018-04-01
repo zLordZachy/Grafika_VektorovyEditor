@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -73,8 +74,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Elements\BaseElement.cs" />
+    <Compile Include="Elements\Brushes.cs" />
     <Compile Include="Elements\EllipseElement.cs" />
     <Compile Include="Elements\LineElement.cs" />
+    <Compile Include="Elements\PatternBrushes.cs" />
     <Compile Include="Elements\PolyLineElement.cs" />
     <Compile Include="Elements\RectangleEditElement.cs" />
     <Compile Include="Elements\RectangleElement.cs" />

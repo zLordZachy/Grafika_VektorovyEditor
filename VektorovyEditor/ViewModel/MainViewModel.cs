@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Channels;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -22,6 +21,12 @@ namespace VektorovyEditor.ViewModel
             {
                 _borderColor = value;
                 OnPropertyChanged(nameof(BorderColor));
+                if (EditedElement != null)
+                {
+                    EditedElement.SetBorderBrush(new SolidColorBrush(BorderColor));
+
+                }
+
             }
         }
 
@@ -31,7 +36,14 @@ namespace VektorovyEditor.ViewModel
             set
             {
                 _fillColor = value;
-                OnPropertyChanged(nameof(BorderColor));
+                OnPropertyChanged(nameof(FillColor));
+
+                if (EditedElement != null)
+                {
+                    EditedElement.SetFillBrush(new SolidColorBrush(FillColor));
+                    
+                }
+
             }
         }
 
@@ -42,6 +54,11 @@ namespace VektorovyEditor.ViewModel
             {
                 _strokeThickness = value;
                 OnPropertyChanged(nameof(StrokeThickness));
+                if (EditedElement != null)
+                {
+                    EditedElement.StrokeThickness = StrokeThickness;
+
+                }
             }
         }
 
@@ -51,8 +68,73 @@ namespace VektorovyEditor.ViewModel
         public bool PolyLine { get; set; }
         public bool Rectangle { get; set; }
         public bool Ellipse { get; set; }
-        public bool Change { get; set; }
-     //   public bool Delet { get; set; }
+
+        public bool Color { get; set; }
+
+        public bool Shape
+        {
+            get => _shape;
+            set
+            {
+                _shape = value;
+                OnPropertyChanged(nameof(Shape));
+
+            }
+
+        }
+
+        public bool Empty
+        {
+            get => _empty;
+            set
+            {
+                _empty = value;
+                OnPropertyChanged(nameof(Empty));
+                if (EditedElement != null)
+                {
+                    EditedElement.SetFillBrush(Brushes.Transparent);
+
+                }
+            }
+        }
+
+        public IList<MyBrushes> MyShapes { get; set; }
+
+        public MyBrushes SelectedShape
+        {
+            get => _selectedShape;
+            set
+            {
+                _selectedShape = value;
+                if (EditedElement != null)
+                {
+                 switch (SelectedShape)
+                    {
+                        case MyBrushes.Vzro1:
+                            EditedElement.SetFillBrush(PatternBrushes.ChessBrush());
+
+                            break;
+                        case MyBrushes.Vzor2:
+                            EditedElement.SetFillBrush(PatternBrushes.BetaBrush());
+                            break;
+                        case MyBrushes.Vzor3:
+                            EditedElement.SetFillBrush(PatternBrushes.SomeBrush());
+                       break;
+                    }
+                }
+            }
+        }
+
+        public bool Change
+        {
+            get => _change;
+            set
+            {
+                _change = value;
+                OnPropertyChanged(nameof(Change));
+            }
+        }
+
         public Canvas Canvas { get; set; }
 
         #region SelectedElements
@@ -88,12 +170,14 @@ namespace VektorovyEditor.ViewModel
             BorderColor = Colors.BlueViolet;
             FillColor = Colors.GreenYellow;
             Elements = new List<BaseElement>();
+            Color = true;
             StrokeThickness = 2;
             Canvas = baseCanvas;
             Canvas.MouseLeftButtonDown += CanvasMouseLeftButtonDown;
             Canvas.MouseLeftButtonUp += CanvasMouseLeftButtonUp;
             Canvas.MouseMove += CanvasMouseMove;
 
+            MyShapes = new List<MyBrushes> {MyBrushes.Vzro1, MyBrushes.Vzor2, MyBrushes.Vzor3};
             DeleteElementCommand = new ZCommand(CanDelete, Delet);
         }
 
@@ -131,6 +215,8 @@ namespace VektorovyEditor.ViewModel
 
         public void CanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+
+           
             if(e.ClickCount!=1)
                 return;
 
@@ -139,11 +225,16 @@ namespace VektorovyEditor.ViewModel
                 SelectedLine = new LineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
                 SelectedLine.Line.MouseLeftButtonDown += LineMouseButtonDown;
                 Elements.Add(SelectedLine);
-            }else if (PolyLine)
+                SetBackRound(SelectedLine);
+
+            }
+            else if (PolyLine)
             {
                 SelectedPolyLine = new PolyLineElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
                 SelectedPolyLine.PolyLine.MouseLeftButtonDown += PolyLineMouseButtonDown;
                 Elements.Add(SelectedPolyLine);
+                SetBackRound(SelectedPolyLine);
+
             }
             else if(Rectangle)
             {
@@ -151,6 +242,7 @@ namespace VektorovyEditor.ViewModel
                 SelectedRectangle.Rectangle.MouseLeftButtonDown += RectangleMouseButtonDown;
                 SelectedRectangle.Rectangle.MouseLeftButtonUp += RectangleMouseButtonUp;
                 Elements.Add(SelectedRectangle);
+                SetBackRound(SelectedRectangle);
 
             }
             else if (Ellipse)
@@ -158,6 +250,8 @@ namespace VektorovyEditor.ViewModel
                 SelectedEllipse = new EllipseElement(Canvas, e.GetPosition(Canvas), FillColor, BorderColor, StrokeThickness, new DoubleCollection());
                 SelectedEllipse.Ellipse.MouseLeftButtonDown += EllipseMouseButtonDown;
                 Elements.Add(SelectedEllipse);
+                SetBackRound(SelectedEllipse);
+
             }
             else if(Change)
             {
@@ -352,6 +446,77 @@ namespace VektorovyEditor.ViewModel
 
                 editeLineElement.Edit();
                 EditedElement = editeLineElement;
+
+                SetComponetsByElement(EditedElement);
+
+                Change = true;
+            }
+        }
+
+        private void SetComponetsByElement(BaseElement editedElement)
+        {
+            if(editedElement== null)
+                return;;
+
+            StrokeThickness = editedElement.StrokeThickness;
+
+            if (editedElement.ColorBorder is SolidColorBrush)
+            {
+                Color color = (editedElement.ColorBorder as SolidColorBrush).Color;
+                BorderColor = color;
+            }
+
+            if (editedElement.ColorFill is SolidColorBrush)
+            {
+                if (!editedElement.IsShaped)
+                {
+                    Color color = (editedElement.ColorFill as SolidColorBrush).Color;
+                    FillColor = color;
+                }
+                else
+                {
+                    Shape = true;
+                }
+
+            
+            }
+
+            if (editedElement.ColorFill == Brushes.Transparent)
+            {
+                Empty = true;
+            }
+
+           
+        }
+
+
+        private void SetBackRound(BaseElement element)
+        {
+            if (Color)
+            {
+                BrushConverter conv = new BrushConverter();
+                SolidColorBrush brush = conv.ConvertFromString(FillColor.ToString()) as SolidColorBrush;
+                element.SetFillBrush(brush);
+            }else if (Empty)
+            {
+                element.SetFillBrush(Brushes.Transparent);
+            }
+            else if (Shape)
+            {
+                switch (SelectedShape)
+                {
+                    case MyBrushes.Vzro1:
+                        element.SetFillBrush(PatternBrushes.ChessBrush());
+
+                        break;
+                    case MyBrushes.Vzor2:
+                        element.SetFillBrush(PatternBrushes.BetaBrush());
+
+                        break;
+                    case MyBrushes.Vzor3:
+                        element.SetFillBrush(PatternBrushes.SomeBrush());
+                        break;
+                }
             }
         }
 
@@ -359,5 +524,9 @@ namespace VektorovyEditor.ViewModel
         private Color _fillColor;
         private double _strokeThickness;
         private BaseElement _editedElement;
+        private bool _change;
+        private bool _shape;
+        private bool _empty;
+        private MyBrushes _selectedShape = MyBrushes.Vzro1;
     }
 }

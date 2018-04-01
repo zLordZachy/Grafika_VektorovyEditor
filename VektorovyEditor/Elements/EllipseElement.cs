@@ -95,6 +95,25 @@ namespace VektorovyEditor.Elements
             base.SetLeft(velikost);
         }
 
+        public override void SetFillBrush(Brush brush)
+        {
+            Ellipse.Fill = brush;
+            base.SetFillBrush(brush);
+
+        }
+        public override void SetBorderBrush(Brush brush)
+        {
+            Ellipse.Stroke = brush;
+            base.SetBorderBrush(brush);
+        }
+
+        public override void Setstroke(double strokeThickness)
+        {
+            if (Ellipse == null)
+                return;
+            Ellipse.StrokeThickness = strokeThickness;
+        }
+
         protected override void SetZIndex(int value)
         {
             Panel.SetZIndex(Ellipse, value);
